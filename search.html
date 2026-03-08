@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>Tìm kiếm quốc gia</title>
+<style>
+body{
+    font-family: Arial;
+    text-align:center;
+    margin-top:50px;
+}
+input{
+    padding:8px;
+    width:200px;
+}
+button{
+    padding:8px 15px;
+    cursor:pointer;
+}
+#result{
+    margin-top:20px;
+    font-size:18px;
+}
+</style>
+</head>
+<body>
+
+<h2>Tìm kiếm quốc gia</h2>
+
+<input type="text" id="countryInput" placeholder="Nhập tên quốc gia">
+<button onclick="searchCountry()">Tìm kiếm</button>
+
+<div id="result"></div>
+
+<script>
+async function searchCountry(){
+    const name = document.getElementById("countryInput").value;
+
+    const url = `https://restcountries.com/v3.1/name/${name}`;
+
+    try{
+        const res = await fetch(url);
+        const data = await res.json();
+
+        const country = data[0];
+
+        const countryName = country.name.common;
+        const capital = country.capital ? country.capital[0] : "Không có";
+        const languages = Object.values(country.languages).join(", ");
+
+        document.getElementById("result").innerHTML = `
+            <p><b>Quốc gia:</b> ${countryName}</p>
+            <p><b>Thủ đô:</b> ${capital}</p>
+            <p><b>Ngôn ngữ chính:</b> ${languages}</p>
+        `;
+    }
+    catch{
+        document.getElementById("result").innerHTML = "Không tìm thấy quốc gia.";
+    }
+}
+</script>
+
+</body>
+</html>
